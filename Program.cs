@@ -120,12 +120,13 @@
             Random rnd = new Random();
             err = rnd.Next(CHANCE);
             err = 0; //uncomment to force fail or set to one for force pass
+            except2();        
             if (err ==0)
             {
                
                 throw new ApplicationException("Except 1 failed. ");
             }
-            except2();
+           
            
         }
 
@@ -149,7 +150,7 @@
             Console.WriteLine("Except 3 processing....");
             Random rnd = new Random();
             err =  rnd.Next(CHANCE);
-            //err = 0; //uncomment to force fail or set to one for force pass
+            err = 0; //uncomment to force fail or set to one for force pass
             if (err == 0)
             {
                 throw new ApplicationException($"Except 3 failed with code {err}. ");
