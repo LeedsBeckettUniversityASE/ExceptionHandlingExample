@@ -6,7 +6,7 @@
     /// </summary>
     internal class Program
     {
-        const int CHANCE = 10;  //liklihood that an error will occur (lower number = more likely)
+        const int CHANCE = 5;  //liklihood that an error will occur (lower number = more likely)
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
@@ -44,10 +44,11 @@
         
         public int method1()
         {
+            //method capable of failing and also calls other service methods
             int err;
             Console.WriteLine("Method 1 processing....");
             Console.WriteLine("Method 1 processing....");
-            err = method3();
+            err = method3(); //call to service method 3 could fail
             if (err < 0)
             {
                 return err;
@@ -60,25 +61,28 @@
             if (err == 0)
                 return -1;
 
-            err = method2();
+            err = method2(); //call to service method 2 could fail
             return err;
         }
 
         public int method2()
         {
+            //method 2 doesn't actually do anything that would produce an error, but it must still pass error codes back
+            int err;
             Console.WriteLine("Method 2 processing....");
             Console.WriteLine("Method 2 processing....");
             Console.WriteLine("Method 2 processing....");
             Console.WriteLine("Method 2 processing....");
-            Random rnd = new Random();
-
-            int err = rnd.Next(CHANCE
-                );
-            if (err == 0)
-                return -2;
-
-            err = method3();
-            return err;
+           
+            err = method3(); //call to service method 3 could fail
+            if (err < 0)
+            {
+                return err;
+            }
+            else
+            {
+                return 1;  //simply passing a code on increases coupling as higher level methods need to know what lower level codes mean
+            }
         }
 
         public int method3()
@@ -93,18 +97,19 @@
             if (err == 0)
                 return -3;
 
-            err =1;
-            return err;
+            return 1; //success
         }
 
-        public int except1()
+
+        //now for the exception handling versions
+        public void except1()
         {
             int err = 0;
             Console.WriteLine("Except 1 processing....");
             Console.WriteLine("Except 1 processing....");
             try
             {
-                except2();
+                except3();
             }
             catch(ApplicationException e)
             {
@@ -114,35 +119,27 @@
             Console.WriteLine("Except 1 processing....");
             Random rnd = new Random();
             err = rnd.Next(CHANCE);
-            //err = 0; //uncomment to force fail or set to one for force pass
+            err = 0; //uncomment to force fail or set to one for force pass
             if (err ==0)
             {
-                throw new ApplicationException($"Except 1 failed with code {err}. ");
+               
+                throw new ApplicationException("Except 1 failed. ");
             }
-            return err;
+            except2();
+           
         }
 
-        public int except2()
+        public void except2()
         {
             int err = 0;
             Console.WriteLine("Except 2 processing....");
             Console.WriteLine("Except 2 processing....");
-          
+            Console.WriteLine("Except 2 processing....");
+            Console.WriteLine("Except 2 processing....");
             except3();  //here we don't care (for whatever reason) whether this fails or succeeds, we are just going to ignore it and let the exception travel up until it is caught elsewhere. It's up to the developer at this instance
-          
-            Console.WriteLine("Except 2 processing....");
-            Console.WriteLine("Except 2 processing....");
-            Random rnd = new Random();
-            err =  rnd.Next(CHANCE);
-            //err = 0; //uncomment to force fail or set to one for force pass
-            if (err == 0)
-            {
-                throw new ApplicationException($"Except 2 failed with code {err}. ");
-            }
-            return err;
         }
 
-        public int except3()
+        public void except3()
         {
             int err = 0;
             Console.WriteLine("Except 3 processing....");
@@ -157,7 +154,7 @@
             {
                 throw new ApplicationException($"Except 3 failed with code {err}. ");
             }
-            return err;
+           
         }
     }
 }
