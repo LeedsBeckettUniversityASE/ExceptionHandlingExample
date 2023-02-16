@@ -6,7 +6,7 @@
     /// </summary>
     internal class Program
     {
-        const int CHANCE = 10;
+        const int CHANCE = 10;  //liklihood that an error will occur (lower number = more likely)
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
@@ -35,7 +35,7 @@
             }
             catch(ApplicationException e)
             {
-                Console.WriteLine("Processing failed."+e.Message);
+                Console.WriteLine("Processing failed. "+e.Message);
                 return;
             }
 
@@ -114,9 +114,10 @@
             Console.WriteLine("Except 1 processing....");
             Random rnd = new Random();
             err = rnd.Next(CHANCE);
+            //err = 0; //uncomment to force fail or set to one for force pass
             if (err ==0)
             {
-                throw new ApplicationException("Except 1 failed. ");
+                throw new ApplicationException($"Except 1 failed with code {err}. ");
             }
             return err;
         }
@@ -127,15 +128,16 @@
             Console.WriteLine("Except 2 processing....");
             Console.WriteLine("Except 2 processing....");
           
-            except3();  //here we don't care (for whatever reason) whether this fails or succeeds, we are just going to ignore it. It's up to the developer at this instance
+            except3();  //here we don't care (for whatever reason) whether this fails or succeeds, we are just going to ignore it and let the exception travel up until it is caught elsewhere. It's up to the developer at this instance
           
             Console.WriteLine("Except 2 processing....");
             Console.WriteLine("Except 2 processing....");
             Random rnd = new Random();
-            err = rnd.Next(CHANCE);
+            err =  rnd.Next(CHANCE);
+            //err = 0; //uncomment to force fail or set to one for force pass
             if (err == 0)
             {
-                throw new ApplicationException("Except 2 failed. ");
+                throw new ApplicationException($"Except 2 failed with code {err}. ");
             }
             return err;
         }
@@ -149,10 +151,11 @@
             Console.WriteLine("Except 3 processing....");
             Console.WriteLine("Except 3 processing....");
             Random rnd = new Random();
-            err = 0;// rnd.Next(CHANCE);
+            err =  rnd.Next(CHANCE);
+            //err = 0; //uncomment to force fail or set to one for force pass
             if (err == 0)
             {
-                throw new ApplicationException("Except 3 failed. ");
+                throw new ApplicationException($"Except 3 failed with code {err}. ");
             }
             return err;
         }
